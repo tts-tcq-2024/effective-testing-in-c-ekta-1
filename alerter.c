@@ -6,37 +6,33 @@ int alertFailureCount = 0;
 int networkAlertStub(float celcius) {
     printf("ALERT: Temperature is %.1f celcius.\n", celcius);
     if (celcius > 250) {
-        return 500; // Simulate failure
+        return 500;
     }
-    return 200; // Simulate success
+    return 200;
 }
-
 void alertInCelcius(float farenheit) {
     float celcius = (farenheit - 32) * 5 / 9;
     int returnCode = networkAlertStub(celcius);
     if (returnCode != 200) {
-        // Increment failure count if return code is not 200
-        alertFailureCount += 1;
+        // non-ok response is not an error! Issues happen in life!
+        // let us keep a count of failures to report
+        // However, this code doesn't count failures!
+        // Add a test below to catch this bug. Alter the stub above, if needed.
+        alertFailureCount += 0;
     }
 }
-
 void testAlertFailureCount() {
     // Reset alertFailureCount to 0 before running tests
     alertFailureCount = 0;
-    
-    // Test cases
-    alertInCelcius(200); // Should not fail (celcius = 93.3, less than 250)
+    alertInCelcius(200); 
     printf("AlertFailureCount = %d\n", alertFailureCount);
-    assert(alertFailureCount == 0);
-    
-    alertInCelcius(300); // Should fail (celcius = 148.9, more than 250)
+    assert(alertFailureCount == 0);  
+    alertInCelcius(300); 
     printf("AlertFailureCount = %d\n", alertFailureCount);
-    assert(alertFailureCount == 1);
-    
-    alertInCelcius(150); // Should not fail (celcius = 65.6, less than 250)
+    assert(alertFailureCount == 1);  
+    alertInCelcius(150);   
     printf("AlertFailureCount = %d\n", alertFailureCount);
-    assert(alertFailureCount == 1);
-    
+    assert(alertFailureCount == 1);  
     printf("All tests are passed successfully!\n");
 }
 
