@@ -3,31 +3,40 @@
 
 int alertFailureCount = 0;
 
-// Simple stub always simulating failure for testing
+// Simulate network alert function that can be controlled for testing
 int networkAlertStub(float celcius) {
     printf("ALERT: Temperature is %.1f celcius.\n", celcius);
-    return 500; // Simulate a failure
+    // To simulate a failure, always return 500 for testing purposes
+    return 500; // Change this to 200 for success
 }
 
 void alertInCelcius(float farenheit) {
-    // Calculate Celsius
+    // Convert Fahrenheit to Celsius
     float celcius = (farenheit - 32) * 5 / 9;
     
-    // Check if the alert failed
+    // Get the response code from the network alert function
     int returnCode = networkAlertStub(celcius);
     
-    // Increment failure count if necessary
-    alertFailureCount += (returnCode != 200);
+    // Increment failure count if return code is not 200
+    if (returnCode != 200) {
+        alertFailureCount++;
+    }
 }
 
 int main() {
-    // Call with sample temperatures
-    alertInCelcius(400.5);
-    alertInCelcius(303.6);
+    // Call alertInCelcius with sample temperatures
+    alertInCelcius(400.5);  // This should fail if networkAlertStub returns 500
+    alertInCelcius(303.6);  // This should also fail if networkAlertStub returns 500
     
-    // Output the number of failed alerts
+    // Check the number of failed alerts
     printf("%d alerts failed.\n", alertFailureCount);
-    printf("All is well (maybe!)\n");
+    
+    // Validation message
+    if (alertFailureCount == 2) {
+        printf("All is well (expected failures accounted for!)\n");
+    } else {
+        printf("FALSE POSITIVE! Expected failure but succeeded\n");
+    }
     
     return 0;
 }
