@@ -33,22 +33,20 @@ void testPrintColorMap() {
     }
     pclose(pipe);
 
-    // Test Case 1: Verify the sequence number
+
     assert(strstr(buffer, "0 | White | Blue") != NULL);
     assert(strstr(buffer, "24 | Violet | Slate") != NULL);
 
-    // Test Case 2: Verify the combination of major and minor colors
+   
     assert(strstr(buffer, "1 | White | Orange") != NULL);
     assert(strstr(buffer, "5 | Red | Blue") != NULL);
 
-    // Test Case 3: Verify the total number of lines printed
+
     int lineCount = 0;
     for(char* p = buffer; *p != '\0'; p++) {
         if(*p == '\n') lineCount++;
     }
     assert(lineCount == 25);
-
-    // Check the return value (note: actual return value cannot be checked this way in this setup)
     printf("All test cases passed!\n");
 }
 
